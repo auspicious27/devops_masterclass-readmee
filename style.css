@@ -22,6 +22,8 @@ body {
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -356,24 +358,178 @@ body.light-theme {
 
 /* Responsive */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
     .header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
     }
 
     .title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        word-break: break-word;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+    }
+
+    .welcome-section {
+        margin-bottom: 30px;
+    }
+
+    .terminal-prompt {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .prompt-line {
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+
+    .search-container {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .refresh-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .welcome-section .search-container:first-of-type {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .welcome-section .search-container:first-of-type .refresh-btn {
+        width: auto;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
     }
 
     .topics-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .topic-card {
+        padding: 15px;
+    }
+
+    .topic-title {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .topic-description {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    .topic-count {
+        font-size: 0.75rem;
     }
 
     .modal-content {
         width: 95%;
-        margin: 10% auto;
-        padding: 20px;
+        margin: 5% auto;
+        padding: 15px;
+        max-height: 90vh;
+    }
+
+    .modal-body h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .modal-body p {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .close {
+        font-size: 24px;
+        padding: 5px;
+    }
+
+    .footer {
+        margin-top: 40px;
+        padding-top: 30px;
+    }
+
+    .footer-text {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+
+    .scenarios-section {
+        margin-top: 40px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .terminal-prompt {
+        font-size: 0.95rem;
+    }
+
+    .description {
+        font-size: 0.85rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .topic-card {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 12px;
     }
 }
 
