@@ -526,31 +526,31 @@ erDiagram
     
     INGRESS {
         string name "zomato-ingress"
-        int port "8080"
+        int port_8080 "8080"
         string controller "Traefik"
     }
     
     SERVICE {
         string name "user-service"
-        int port "3001"
+        int port_3001 "3001"
         string type "ClusterIP"
     }
     
     POD {
         string name "user-pod"
         string status "Running"
-        int replicas "2"
+        int replicas_2 "2"
     }
     
     DEPLOYMENT {
         string name "user-service"
-        int replicas "2"
+        int replicas_2 "2"
         string strategy "RollingUpdate"
     }
     
     CONTAINER {
         string image "user-service:v1"
-        int port "3001"
+        int port_3001 "3001"
     }
     
     IMAGE {
@@ -561,7 +561,7 @@ erDiagram
     
     REGISTRY {
         string name "k3d-zomato-registry"
-        int port "5000"
+        int port_5000 "5000"
     }
     
     NODE {
@@ -571,8 +571,8 @@ erDiagram
     
     CLUSTER {
         string name "zomato-cluster"
-        int servers "1"
-        int agents "2"
+        int servers_1 "1"
+        int agents_2 "2"
     }
 ```
 
