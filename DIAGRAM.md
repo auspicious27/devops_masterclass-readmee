@@ -430,44 +430,42 @@ graph TB
 
 ## 8. Complete Request Lifecycle
 
-This state diagram shows all states a request goes through from initiation to completion.
+This flowchart shows all states a request goes through from initiation to completion.
 
 ```mermaid
-stateDiagram-v2
-    [*] --> ClientRequest: User opens browser
-    ClientRequest --> IngressRouting: GET localhost:8080/users
-    IngressRouting --> PathMatching: Traefik receives request
-    PathMatching --> ServiceDiscovery: Match /users path
-    ServiceDiscovery --> LoadBalancing: Route to user-service:3001
-    LoadBalancing --> PodSelection: Select pod (Round Robin)
-    PodSelection --> PodProcessing: Forward to selected pod
-    PodProcessing --> DataRetrieval: Process request
-    DataRetrieval --> ResponseGeneration: Generate JSON response
-    ResponseGeneration --> ServiceResponse: Return to service
-    ServiceResponse --> IngressResponse: Return to Ingress
-    IngressResponse --> ClientResponse: Return to browser
-    ClientResponse --> [*]: Display data
+flowchart LR
+    Start([User opens browser]) --> ClientRequest[Client Request]
+    ClientRequest --> IngressRouting[Ingress Routing<br/>GET localhost:8080/users]
+    IngressRouting --> PathMatching[Path Matching<br/>Traefik receives request]
+    PathMatching --> ServiceDiscovery[Service Discovery<br/>Match /users path]
+    ServiceDiscovery --> LoadBalancing[Load Balancing<br/>Route to user-service:3001]
+    LoadBalancing --> PodSelection[Pod Selection<br/>Select pod Round Robin]
+    PodSelection --> PodProcessing[Pod Processing<br/>Forward to selected pod]
+    PodProcessing --> DataRetrieval[Data Retrieval<br/>Process request]
+    DataRetrieval --> ResponseGeneration[Response Generation<br/>Generate JSON response]
+    ResponseGeneration --> ServiceResponse[Service Response<br/>Return to service]
+    ServiceResponse --> IngressResponse[Ingress Response<br/>Return to Ingress]
+    IngressResponse --> ClientResponse[Client Response<br/>Display data]
+    ClientResponse --> End([Request Complete])
     
-    note right of LoadBalancing
-        If Pod 1 fails,
-        automatically route
-        to Pod 2
-    end note
+    style Start fill:#e1f5ff
+    style End fill:#c8e6c9
+    style LoadBalancing fill:#fff9c4
 ```
 
 ### 📝 Explanation
 
-Request goes through these states:
-1. Client Request
-2. Ingress Routing
-3. Path Matching
-4. Service Discovery
-5. Load Balancing
-6. Pod Selection
-7. Pod Processing
-8. Data Retrieval
-9. Response Generation
-10. Response Delivery
+Request goes through these steps:
+1. **Client Request**: User opens browser
+2. **Ingress Routing**: GET request to localhost:8080/users
+3. **Path Matching**: Traefik receives and matches path
+4. **Service Discovery**: Match /users path to user-service
+5. **Load Balancing**: Route to user-service:3001
+6. **Pod Selection**: Select pod using Round Robin
+7. **Pod Processing**: Forward to selected pod
+8. **Data Retrieval**: Process request
+9. **Response Generation**: Generate JSON response
+10. **Response Delivery**: Return to browser and display
 
 ---
 
@@ -528,31 +526,31 @@ erDiagram
     
     INGRESS {
         string name "zomato-ingress"
-        int port 8080
+        int port "8080"
         string controller "Traefik"
     }
     
     SERVICE {
         string name "user-service"
-        int port 3001
+        int port "3001"
         string type "ClusterIP"
     }
     
     POD {
         string name "user-pod"
         string status "Running"
-        int replicas 2
+        int replicas "2"
     }
     
     DEPLOYMENT {
         string name "user-service"
-        int replicas 2
+        int replicas "2"
         string strategy "RollingUpdate"
     }
     
     CONTAINER {
         string image "user-service:v1"
-        int port 3001
+        int port "3001"
     }
     
     IMAGE {
@@ -563,7 +561,7 @@ erDiagram
     
     REGISTRY {
         string name "k3d-zomato-registry"
-        int port 5000
+        int port "5000"
     }
     
     NODE {
@@ -573,8 +571,8 @@ erDiagram
     
     CLUSTER {
         string name "zomato-cluster"
-        int servers 1
-        int agents 2
+        int servers "1"
+        int agents "2"
     }
 ```
 
@@ -599,29 +597,27 @@ This Gantt chart shows the timeline for setting up the entire system.
 ```mermaid
 gantt
     title Zomato Microservices Setup Timeline
-    dateFormat X
-    axisFormat %s
-    
+    dateFormat YYYY-MM-DD
     section Infrastructure
-    Install Docker           :0, 5m
-    Install kubectl          :5m, 2m
-    Install k3d             :7m, 2m
-    Create Registry         :9m, 1m
-    Create Cluster          :10m, 3m
-    Install Ingress         :13m, 2m
+    Install Docker           :2024-01-01, 5d
+    Install kubectl          :2024-01-06, 2d
+    Install k3d             :2024-01-08, 2d
+    Create Registry         :2024-01-10, 1d
+    Create Cluster          :2024-01-11, 3d
+    Install Ingress         :2024-01-14, 2d
     
     section Services
-    User Service            :15m, 10m
-    Restaurant Service      :25m, 10m
-    Order Service           :35m, 10m
+    User Service            :2024-01-16, 10d
+    Restaurant Service      :2024-01-26, 10d
+    Order Service           :2024-02-05, 10d
     
     section Kubernetes
-    Deploy Services         :45m, 5m
-    Configure Ingress       :50m, 2m
-    Testing                 :52m, 3m
+    Deploy Services         :2024-02-15, 5d
+    Configure Ingress       :2024-02-20, 2d
+    Testing                 :2024-02-22, 3d
     
     section Verification
-    Final Testing           :55m, 5m
+    Final Testing           :2024-02-25, 5d
 ```
 
 ### 📝 Explanation
@@ -722,50 +718,45 @@ Testing flow:
 
 ## 14. Auto-Healing Process Visualization
 
-This state diagram shows the complete auto-healing process.
+This flowchart shows the complete auto-healing process.
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Normal: System Running
-    Normal --> PodFailure: Pod Crashes/Deleted
-    PodFailure --> ControllerDetect: Kubernetes Controller Detects
-    ControllerDetect --> CheckDesired: Compare Current vs Desired
-    CheckDesired --> CreatePod: Current < Desired (2)
-    CreatePod --> PullImage: Pull Image from Registry
-    PullImage --> StartContainer: Start Container
-    StartContainer --> HealthCheck: Run Health Check
-    HealthCheck --> Ready: Pod Ready
-    Ready --> Normal: System Restored
-    HealthCheck --> Restart: Health Check Fails
+flowchart TD
+    Start([System Running]) --> Normal[Normal Operation]
+    Normal --> PodFailure[Pod Failure Detected]
+    PodFailure --> ControllerDetect[Controller Detects Mismatch]
+    ControllerDetect --> CheckDesired{Current < Desired?}
+    CheckDesired -->|Yes| CreatePod[Create New Pod]
+    CheckDesired -->|No| Normal
+    CreatePod --> PullImage[Pull Image from Registry]
+    PullImage --> StartContainer[Start Container]
+    StartContainer --> HealthCheck{Health Check}
+    HealthCheck -->|Pass| Ready[Pod Ready]
+    HealthCheck -->|Fail| Restart[Restart Container]
     Restart --> StartContainer
+    Ready --> Normal
+    Normal --> End([System Restored])
     
-    note right of PodFailure
-        Pod can fail due to:
-        - Application crash
-        - Manual deletion
-        - Node failure
-        - Resource limits
-    end note
-    
-    note right of Ready
-        Kubernetes ensures
-        desired replica count
-        is always maintained
-    end note
+    style Start fill:#e1f5ff
+    style End fill:#c8e6c9
+    style PodFailure fill:#ffcdd2
+    style Ready fill:#c8e6c9
+    style HealthCheck fill:#fff9c4
 ```
 
 ### 📝 Explanation
 
-Auto-healing states:
-1. Normal operation
-2. Pod failure detected
-3. Controller detects mismatch
-4. New pod created
-5. Image pulled
-6. Container started
-7. Health check
-8. Pod ready
-9. System restored
+Auto-healing process:
+1. **Normal Operation**: System running normally
+2. **Pod Failure**: Pod crashes, deleted, or node fails
+3. **Controller Detection**: Kubernetes detects replica mismatch
+4. **Check Desired State**: Compare current vs desired replica count
+5. **Create Pod**: Create new pod if needed
+6. **Pull Image**: Pull container image from registry
+7. **Start Container**: Start the container
+8. **Health Check**: Verify pod is healthy
+9. **Pod Ready**: Pod becomes ready and serves traffic
+10. **System Restored**: Normal operation resumed
 
 ---
 
@@ -776,17 +767,15 @@ This Gantt chart shows the timeline for pod auto-healing.
 ```mermaid
 gantt
     title Pod Auto-Healing Timeline
-    dateFormat X
-    axisFormat %s
-    
+    dateFormat YYYY-MM-DD
     section Pod Lifecycle
-    Pod Running (Normal)     :0, 30s
-    Pod Deleted              :30s, 1s
-    Controller Detection     :31s, 2s
-    Image Pull               :33s, 5s
-    Container Start          :38s, 3s
-    Health Check             :41s, 2s
-    Pod Ready (Restored)     :43s, 30s
+    Pod Running (Normal)     :2024-01-01, 1d
+    Pod Deleted              :2024-01-02, 1d
+    Controller Detection     :2024-01-03, 1d
+    Image Pull               :2024-01-04, 2d
+    Container Start          :2024-01-06, 1d
+    Health Check             :2024-01-07, 1d
+    Pod Ready (Restored)     :2024-01-08, 1d
 ```
 
 ### 📝 Explanation
