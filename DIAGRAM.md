@@ -556,7 +556,7 @@ erDiagram
     IMAGE {
         string name "user-service"
         string tag "v1"
-        string registry "k3d-zomato-registry:5000"
+        string registry "k3d-zomato-registry port 5000"
     }
     
     REGISTRY {
